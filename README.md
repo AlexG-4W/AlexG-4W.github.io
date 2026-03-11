@@ -20,7 +20,3 @@ This website was built from the ground up to be lightweight, performant, and com
 
 *   **Architecture:** 100% static site. No frontend frameworks (React, Vue, etc.), no build steps, and zero external dependencies.
 *   **Styling:** Custom CSS utilizing native CSS variables, Flexbox, and CSS Grid to ensure full responsiveness across all mobile and desktop devices. The UI employs a "Glassmorphism" aesthetic with a deep dark theme.
-*   **The PCB Canvas Animation:** The background features a custom-written HTML5 `<canvas>` animation.
-    *   **Algorithmic Routing:** The JavaScript logic procedurally generates a Printed Circuit Board (PCB) schematic. Crucially, the pathfinding algorithm enforces strict 45-degree and 90-degree routing constraints to accurately mimic real-world hardware design.
-    *   **Volumetric Rendering:** The traces and vias utilize radial gradients and drop shadows (`ctx.shadowBlur`, `ctx.shadowColor`) to create a subtle, 3D volumetric appearance.
-    *   **Ambient Animation:** Glowing "electrons" traverse these valid paths. The animation loop is optimized using `requestAnimationFrame` and dynamically recalculates the grid and routing upon window resize events to maintain a smooth 60fps ambient effect without distracting from the core content.
