@@ -12,7 +12,7 @@
 
 ## 👨‍💻 About
 
-This repository contains the source code for my personal portfolio website. As an **Electrical & Electronics Engineer & Software Developer**, I focus on bridging the gap between hardware and software. My expertise spans Python development, PCB diagnostics, and industrial automation. This portfolio serves as a central hub for my open-source contributions and technical projects.
+This repository contains the source code for my personal portfolio website. As an **Electrical & Electronics Engineer**, I focus on bridging the gap between hardware and software. My expertise spans Python development, PCB diagnostics, and industrial automation. This portfolio serves as a central hub for my open-source contributions and technical projects.
 
 ## ⚙️ Under the Hood (Technical Details)
 
