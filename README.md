@@ -19,4 +19,4 @@ This repository contains the source code for my personal portfolio website. As a
 This website was built from the ground up to be lightweight, performant, and completely dependency-free.
 
 *   **Architecture:** 100% static site. No frontend frameworks (React, Vue, etc.), no build steps, and zero external dependencies.
-*   **Styling:** Custom CSS utilizing native CSS variables, Flexbox, and CSS Grid to ensure full responsiveness across all mobile and desktop devices. The UI employs a "Glassmorphism" aesthetic with a deep dark theme.
+*   **Styling:** Custom CSS utilizing native CSS variables, Flexbox, and CSS Grid to ensure full responsiveness across all mobile and desktop devices. 
