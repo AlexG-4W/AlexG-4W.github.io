@@ -1,4 +1,4 @@
-const canvas = document.getElementById('pcb-canvas');
+﻿const canvas = document.getElementById('pcb-canvas');
 const ctx = canvas.getContext('2d');
 
 let width, height;
@@ -206,3 +206,228 @@ window.addEventListener('resize', resize);
 // Initial setup
 resize();
 draw();
+
+// --- 3D Cabinet & Filtering Logic ---
+const projectsData = [
+    {
+        title: "AUTONOMOUS-ENGINEERING-COPILOT",
+        category: "AI / Neural Networks",
+        badges: "Python / PySide6 / LLM",
+        desc: "A cross-platform local AI assistant for engineers, featuring RAG-based document Q&A and infrastructure-independent inference.",
+        link: "https://github.com/AlexG-4W/autonomous-engineering-copilot",
+        repo: "autonomous-engineering-copilot"
+    },
+    {
+        title: "HMON-OVERLAY",
+        category: "Windows Software",
+        badges: "Windows / C++ / Python",
+        desc: "Transparent hardware monitoring overlay for Windows (CPU, RAM, GPU).",
+        link: "https://github.com/AlexG-4W/HMON-OVERLAY",
+        repo: "HMON-OVERLAY"
+    },
+    {
+        title: "WEFREE",
+        category: "Windows Software",
+        badges: "Python",
+        desc: "Portable Secure File Server.",
+        link: "https://github.com/AlexG-4W/WEFREE",
+        repo: "WEFREE"
+    },
+    {
+        title: "HOTSPOT-MANAGER",
+        category: "Windows Software",
+        badges: "Windows",
+        desc: "A lightweight, modern desktop utility designed to manage the built-in Mobile Hotspot functionality in Windows 11.",
+        link: "https://github.com/AlexG-4W/HOTSPOT-MANAGER",
+        repo: "HOTSPOT-MANAGER"
+    },
+    {
+        title: "HFPS",
+        category: "Windows Software",
+        badges: "Windows",
+        desc: "Minimalist Hardware Overlay (NVIDIA).",
+        link: "https://github.com/AlexG-4W/HFPS",
+        repo: "HFPS"
+    },
+    {
+        title: "SECUREMESSENGER-BOLTC",
+        category: "Windows Software",
+        badges: "Python / PyQt6",
+        desc: "End-to-end encrypted messenger built with Python and PyQt6.",
+        link: "https://github.com/AlexG-4W/SECUREMESSENGER-BOLTC",
+        repo: "SECUREMESSENGER-BOLTC"
+    },
+    {
+        title: "MOUSE-MONITOR-PRO",
+        category: "Windows Software",
+        badges: "Windows",
+        desc: "A high-performance Windows utility designed for gamers, developers, and hardware enthusiasts to analyze mouse sensor behavior and cursor precision in real-time.",
+        link: "https://github.com/AlexG-4W/MOUSE-MONITOR-PRO",
+        repo: "MOUSE-MONITOR-PRO"
+    },
+    {
+        title: "HFDM-THERMAL-SOLVER",
+        category: "Simulators",
+        badges: "Python / C++",
+        desc: "A high-performance 2D Finite Difference Method (FDM) Thermal Solver designed to simulate transient and steady-state temperature distributions on Printed Circuit Boards (PCBs).",
+        link: "https://github.com/AlexG-4W/HFDM-THERMAL-SOLVER",
+        repo: "HFDM-THERMAL-SOLVER"
+    },
+    {
+        title: "WMN-TOPOLOGY-METRIC-SIMULATOR",
+        category: "Simulators",
+        badges: "Python / NetworkX / Matplotlib",
+        desc: "A specialized simulator for Wireless Mesh Networks (WMN) designed to evaluate routing metrics (ETX, ETT, etc.) across various network topologies.",
+        link: "https://github.com/AlexG-4W/WMN-Topology-Metric-Simulator",     
+        repo: "WMN-Topology-Metric-Simulator"
+    }
+    ];
+const cabinet = document.getElementById('cabinet');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+function renderProjects(filter = "All") {
+    cabinet.innerHTML = '';
+    
+    if (filter === "All") {
+        cabinet.className = 'grid-container';
+        projectsData.forEach((proj) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h4>${proj.title}</h4>
+                <span class="badge lang-python">${proj.badges}</span>
+                <p>${proj.desc}</p>
+                <a href="${proj.link}" target="_blank" class="btn">View on GitHub</a>
+            `;
+            cabinet.appendChild(card);
+        });
+    } else {
+        cabinet.className = 'cabinet';
+        projectsData.forEach((proj, index) => {
+            if (proj.category !== filter) return;
+            
+            const folder = document.createElement('div');
+            folder.className = 'folder';
+            folder.dataset.repo = proj.repo;
+            folder.dataset.index = index;
+            folder.innerHTML = `
+                <div class="folder-back"></div>
+                <div class="folder-inside">
+                    <button class="close-btn" style="display: none;">Close</button>
+                    <div class="readme-content">
+                        <div class="loading-spinner" style="display: none;">Loading...</div>
+                        <div class="content-body"></div>
+                    </div>
+                </div>
+                <div class="folder-front">
+                    <h4>${proj.title}</h4>
+                    <span class="badge lang-python">${proj.badges}</span>
+                    <p>${proj.desc}</p>
+                    <a href="${proj.link}" target="_blank" class="btn">View on GitHub</a>
+                </div>
+            `;
+            cabinet.appendChild(folder);
+        });
+        attachFolderEvents();
+    }
+}
+
+function attachFolderEvents() {
+    const folders = document.querySelectorAll('.folder');
+    
+    folders.forEach(folder => {
+        const link = folder.querySelector('a.btn');
+        if (link) {
+            link.addEventListener('click', (e) => e.stopPropagation());
+        }
+
+        folder.addEventListener('click', function(e) {
+            if (this.classList.contains('active')) return;
+            
+            folders.forEach(f => {
+                if (f !== this) {
+                    f.classList.remove('active');
+                    f.classList.add('inactive');
+                    const cb = f.querySelector('.close-btn');
+                    if(cb) cb.style.display = 'none';
+                }
+            });
+            
+            this.classList.remove('inactive');
+            this.classList.add('active');
+            
+            const closeBtn = this.querySelector('.close-btn');
+            closeBtn.style.display = 'block';
+            
+            closeBtn.onclick = (ev) => {
+                ev.stopPropagation();
+                this.classList.remove('active');
+                closeBtn.style.display = 'none';
+                folders.forEach(f => {
+                    f.classList.remove('inactive');
+                });
+            };
+            
+            const repo = this.dataset.repo;
+            const contentBody = this.querySelector('.content-body');
+            const spinner = this.querySelector('.loading-spinner');
+            
+            if (!contentBody.innerHTML.trim()) {
+                spinner.style.display = 'flex';
+                fetch(`https://api.github.com/repos/AlexG-4W/${repo}/readme`, {
+                    headers: { "Accept": "application/vnd.github.html" }
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error("README not found");
+                    return res.text();
+                })
+                .then(html => {
+                    contentBody.innerHTML = html;
+                })
+                .catch(err => {
+                    contentBody.innerHTML = '<p>Failed to load README. It might not exist.</p>';
+                })
+                .finally(() => {
+                    spinner.style.display = 'none';
+                });
+            }
+        });
+    });
+}
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProjects(btn.dataset.filter);
+    });
+});
+
+
+// --- Modal Close Enhancements ---
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const activeFolder = document.querySelector('.folder.active');
+        if (activeFolder) {
+            const closeBtn = activeFolder.querySelector('.close-btn');
+            if (closeBtn) closeBtn.click();
+        }
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const activeFolder = document.querySelector('.folder.active');
+    if (activeFolder && !activeFolder.contains(e.target)) {
+        const closeBtn = activeFolder.querySelector('.close-btn');
+        if (closeBtn) closeBtn.click();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderProjects();
+});
+
+
+
+
+
