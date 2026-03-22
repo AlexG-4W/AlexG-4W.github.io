@@ -34,7 +34,6 @@ function initNetwork() {
     
     let numTraces = Math.floor((width * height) / 20000); // Responsive trace density
     
-    // Valid 45 and 90 degree movements on a grid
     const dirs = [
         {dx: 1, dy: 0}, {dx: 1, dy: 1}, {dx: 0, dy: 1}, {dx: -1, dy: 1},
         {dx: -1, dy: 0}, {dx: -1, dy: -1}, {dx: 0, dy: -1}, {dx: 1, dy: -1}
@@ -63,27 +62,21 @@ function initNetwork() {
         }
     }
 
-    // Generate PCB traces
     for (let i = 0; i < numTraces; i++) {
         let x = Math.floor(Math.random() * cols);
         let y = Math.floor(Math.random() * rows);
         let dirIdx = Math.floor(Math.random() * 8);
         
-        let length = Math.floor(Math.random() * 8) + 4; // Trace length in grid units
-        let prevNode = addNode(x * config.gridSize, y * config.gridSize, true); // Root is always a pad
+        let length = Math.floor(Math.random() * 8) + 4;
+        let prevNode = addNode(x * config.gridSize, y * config.gridSize, true);
         
         for (let j = 0; j < length; j++) {
-            // 30% chance to change direction by 45 degrees
             if (Math.random() < 0.3) {
                 dirIdx = (dirIdx + (Math.random() > 0.5 ? 1 : -1) + 8) % 8;
             }
-            
             x += dirs[dirIdx].dx;
             y += dirs[dirIdx].dy;
-            
             if (x < 0 || x > cols || y < 0 || y > rows) break;
-            
-            // Nodes along the path, slight chance for intermediate pad, always pad at end
             let isPad = (j === length - 1) || (Math.random() < 0.15);
             let currNode = addNode(x * config.gridSize, y * config.gridSize, isPad);
             addEdge(prevNode, currNode);
@@ -91,13 +84,11 @@ function initNetwork() {
         }
     }
     
-    // Spawn electrons on valid paths
     let validNodes = nodes.filter(n => n.neighbors.length > 0);
     for (let i = 0; i < config.electronCount; i++) {
         if (validNodes.length === 0) break;
         let startNode = validNodes[Math.floor(Math.random() * validNodes.length)];
         let targetNode = startNode.neighbors[Math.floor(Math.random() * startNode.neighbors.length)];
-        
         electrons.push({
             x: startNode.x,
             y: startNode.y,
@@ -111,103 +102,71 @@ function initNetwork() {
 
 function draw() {
     ctx.clearRect(0, 0, width, height);
-    
-    // Draw copper traces
     ctx.lineWidth = 1.5;
     ctx.strokeStyle = config.traceColor;
-    
-    // Volumetric shadow effect
     ctx.shadowBlur = 5;
     ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
-
     ctx.beginPath();
     for (let edge of edges) {
         ctx.moveTo(edge.a.x, edge.a.y);
         ctx.lineTo(edge.b.x, edge.b.y);
     }
     ctx.stroke();
-    
-    // Reset shadows for next elements
     ctx.shadowBlur = 0;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
-    
-    // Draw vias/pads with 3D appearance
     for (let node of nodes) {
         if (node.isPad) {
             let gradient = ctx.createRadialGradient(node.x - 1, node.y - 1, 0, node.x, node.y, 3.5);
-            gradient.addColorStop(0, 'rgba(120, 140, 155, 0.7)'); // Lighter center for highlight
+            gradient.addColorStop(0, 'rgba(120, 140, 155, 0.7)');
             gradient.addColorStop(1, config.padColor);
-            
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(node.x, node.y, 3.5, 0, Math.PI * 2);
             ctx.fill();
-            
-            // Subtle edge stroke for depth
             ctx.strokeStyle = 'rgba(20, 30, 40, 0.6)';
             ctx.lineWidth = 0.5;
             ctx.stroke();
         }
     }
-    
-    // Update and draw traveling electrons
     for (let e of electrons) {
         let dx = e.target.x - e.source.x;
         let dy = e.target.y - e.source.y;
         let dist = Math.sqrt(dx*dx + dy*dy);
-        
-        if (dist === 0) {
-            e.progress = 1;
-        } else {
-            e.progress += e.speed / dist;
-        }
-        
-        // Target reached
+        if (dist === 0) { e.progress = 1; } else { e.progress += e.speed / dist; }
         if (e.progress >= 1) {
             let temp = e.source;
             e.source = e.target;
             e.x = e.source.x;
             e.y = e.source.y;
             e.progress = 0;
-            
             if (e.source.neighbors.length > 0) {
-                // Prevent immediate U-turns unless it's a dead end
                 let possible = e.source.neighbors;
-                if (possible.length > 1) {
-                    possible = possible.filter(n => n !== temp); 
-                }
+                if (possible.length > 1) { possible = possible.filter(n => n !== temp); }
                 if (possible.length === 0) possible = e.source.neighbors;
-                
                 e.target = possible[Math.floor(Math.random() * possible.length)];
             }
         } else {
             e.x = e.source.x + dx * e.progress;
             e.y = e.source.y + dy * e.progress;
         }
-        
-        // Render electron
         ctx.fillStyle = config.electronColor;
         ctx.shadowBlur = 12;
         ctx.shadowColor = config.electronColor;
         ctx.beginPath();
         ctx.arc(e.x, e.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0; // Reset shadow for next draw operations
+        ctx.shadowBlur = 0;
     }
-    
     requestAnimationFrame(draw);
 }
 
 window.addEventListener('resize', resize);
-
-// Initial setup
 resize();
 draw();
 
-// --- 3D Cabinet & Filtering Logic ---
 const projectsData = [
     {
         title: "AUTONOMOUS-ENGINEERING-COPILOT",
@@ -281,51 +240,48 @@ const projectsData = [
         link: "https://github.com/AlexG-4W/WMN-Topology-Metric-Simulator",     
         repo: "WMN-Topology-Metric-Simulator"
     }
-    ];
+];
+
 const cabinet = document.getElementById('cabinet');
 const filterBtns = document.querySelectorAll('.filter-btn');
 
-function renderProjects(filter = "All") {
+function renderProjects(filter = 'All') {
     cabinet.innerHTML = '';
-    
-    if (filter === "All") {
+    if (filter === 'All') {
         cabinet.className = 'grid-container';
         projectsData.forEach((proj) => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.innerHTML = `
-                <h4>${proj.title}</h4>
-                <span class="badge lang-python">${proj.badges}</span>
-                <p>${proj.desc}</p>
-                <a href="${proj.link}" target="_blank" class="btn">View on GitHub</a>
-            `;
+            card.innerHTML = '<h4>' + proj.title + '</h4>' +
+                '<div class=\"badge\">' + proj.badges + '</div>' +
+                '<p>' + proj.desc + '</p>' +
+                '<a href=\"' + proj.link + '\" target=\"_blank\" class=\"btn\" onclick=\"event.stopPropagation()\">View on GitHub</a>';
             cabinet.appendChild(card);
         });
     } else {
         cabinet.className = 'cabinet';
         projectsData.forEach((proj, index) => {
             if (proj.category !== filter) return;
-            
             const folder = document.createElement('div');
             folder.className = 'folder';
             folder.dataset.repo = proj.repo;
             folder.dataset.index = index;
-            folder.innerHTML = `
-                <div class="folder-back"></div>
-                <div class="folder-inside">
-                    <button class="close-btn" style="display: none;">Close</button>
-                    <div class="readme-content">
-                        <div class="loading-spinner" style="display: none;">Loading...</div>
-                        <div class="content-body"></div>
-                    </div>
-                </div>
-                <div class="folder-front">
-                    <h4>${proj.title}</h4>
-                    <span class="badge lang-python">${proj.badges}</span>
-                    <p>${proj.desc}</p>
-                    <a href="${proj.link}" target="_blank" class="btn">View on GitHub</a>
-                </div>
-            `;
+            folder.innerHTML = '<div class=\"folder-back\"></div>' +
+                '<div class=\"folder-inside\">' +
+                    '<div class=\"folder-controls\" style=\"display: none;\">' +
+                        '<a href=\"' + proj.link + '\" target=\"_blank\" class=\"github-btn-inside\" onclick=\"event.stopPropagation()\">View on GitHub</a>' +
+                        '<button class=\"close-btn\">Close</button>' +
+                    '</div>' +
+                    '<div class=\"readme-content\">' +
+                        '<div class=\"loading-spinner\" style=\"display: none;\">Loading...</div>' +
+                        '<div class=\"content-body\"></div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class=\"folder-front\">' +
+                    '<h4>' + proj.title + '</h4>' +
+                    '<div class=\"badge\">' + proj.badges + '</div>' +
+                    '<p>' + proj.desc + '</p>' +
+                '</div>';
             cabinet.appendChild(folder);
         });
         attachFolderEvents();
@@ -334,77 +290,54 @@ function renderProjects(filter = "All") {
 
 function attachFolderEvents() {
     const folders = document.querySelectorAll('.folder');
-    
     folders.forEach(folder => {
-        const link = folder.querySelector('a.btn');
-        if (link) {
-            link.addEventListener('click', (e) => e.stopPropagation());
-        }
-
         folder.addEventListener('click', function(e) {
             if (this.classList.contains('active')) return;
-            
             folders.forEach(f => {
                 if (f !== this) {
                     f.classList.remove('active');
                     f.classList.add('inactive');
-                    const cb = f.querySelector('.close-btn');
-                    if(cb) cb.style.display = 'none';
+                    const ctrl = f.querySelector('.folder-controls');
+                    if(ctrl) ctrl.style.display = 'none';
                 }
             });
-            
             this.classList.remove('inactive');
             this.classList.add('active');
-            
+            const controls = this.querySelector('.folder-controls');
+            if (controls) controls.style.display = 'flex';
             const closeBtn = this.querySelector('.close-btn');
-            closeBtn.style.display = 'block';
-            
-            closeBtn.onclick = (ev) => {
-                ev.stopPropagation();
-                this.classList.remove('active');
-                closeBtn.style.display = 'none';
-                folders.forEach(f => {
-                    f.classList.remove('inactive');
-                });
-            };
-            
+            if (closeBtn) {
+                closeBtn.onclick = (ev) => {
+                    ev.stopPropagation();
+                    this.classList.remove('active');
+                    if (controls) controls.style.display = 'none';
+                    folders.forEach(f => f.classList.remove('inactive'));
+                };
+            }
             const repo = this.dataset.repo;
             const contentBody = this.querySelector('.content-body');
             const spinner = this.querySelector('.loading-spinner');
-            
             if (!contentBody.innerHTML.trim()) {
                 spinner.style.display = 'flex';
-                fetch(`https://api.github.com/repos/AlexG-4W/${repo}/readme`, {
-                    headers: { "Accept": "application/vnd.github.html" }
+                fetch('https://api.github.com/repos/AlexG-4W/' + repo + '/readme', {
+                    headers: { 'Accept': 'application/vnd.github.html' }
                 })
                 .then(res => {
-                    if (!res.ok) throw new Error("README not found");
+                    if (!res.ok) throw new Error('README not found');
                     return res.text();
                 })
-                .then(html => {
-                    contentBody.innerHTML = html;
+                .then(html => { 
+                    contentBody.innerHTML = html; 
+                    const controls = this.querySelector(".folder-controls");
+                    if (controls) controls.style.display = "flex";
                 })
-                .catch(err => {
-                    contentBody.innerHTML = '<p>Failed to load README. It might not exist.</p>';
-                })
-                .finally(() => {
-                    spinner.style.display = 'none';
-                });
+                .catch(err => { contentBody.innerHTML = '<p>Failed to load README.</p>'; })
+                .finally(() => { spinner.style.display = 'none'; });
             }
         });
     });
 }
 
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderProjects(btn.dataset.filter);
-    });
-});
-
-
-// --- Modal Close Enhancements ---
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         const activeFolder = document.querySelector('.folder.active');
@@ -421,6 +354,14 @@ document.addEventListener('click', (e) => {
         const closeBtn = activeFolder.querySelector('.close-btn');
         if (closeBtn) closeBtn.click();
     }
+});
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProjects(btn.dataset.filter);
+    });
 });
 
 document.addEventListener('DOMContentLoaded', () => {

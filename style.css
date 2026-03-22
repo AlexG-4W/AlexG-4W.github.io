@@ -100,7 +100,7 @@ h3 {
     scrollbar-width: none;
 }
 .filter-menu::-webkit-scrollbar {
-    display: none;
+    
 }
 .filter-btn {
     background: transparent;
@@ -120,6 +120,7 @@ h3 {
     background: rgba(0, 243, 255, 0.1);
     box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }
+/* --- 3D Cabinet & Folder Base Styles --- */
 .cabinet {
     display: flex;
     flex-wrap: wrap;
@@ -129,6 +130,7 @@ h3 {
     min-height: 400px;
     position: relative;
 }
+
 .folder {
     width: 340px;
     min-height: 450px;
@@ -137,92 +139,143 @@ h3 {
     transition: transform 0.5s ease, z-index 0.5s ease;
     cursor: pointer;
 }
-.folder-front, .folder-back, 
-.folder-back {
-    background: rgba(20, 25, 30, 0.9);
-    transform: translateZ(-2px);
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-    z-index: 1;
-}
+
+
 
 .folder-front {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    background: rgba(30, 40, 50, 0.95);
-    transform-origin: left center;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #1a1d24 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 10;
+    transform: translateZ(5px);
     backface-visibility: hidden;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transform-origin: left center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px 16px 8px 8px;
+    border: 1px solid var(--glass-border);
 }
 
-.folder-front .btn {
-    margin-top: auto;
-    width: 100%;
-}
+
 
 .folder-inside {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: translateZ(2px);
-    z-index: 5;
+    top: 0; left: 0; width: 100%; height: 100%;
     background-color: #1a1d24 !important;
     color: #ffffff !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1;
+    transform: translateZ(1px);
+    transition: opacity 0.3s ease;
     padding: 40px 20px 20px 20px;
     overflow-y: auto;
-    opacity: 0;
-    transition: opacity 0.3s ease;
     border-radius: 8px 16px 8px 8px;
     border: 1px solid var(--glass-border);
     text-align: left;
 }
 
-.folder.active .folder-inside {
+
+
+.folder-back {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: translateZ(2px);
-    z-index: 5;
-    background-color: #1a1d24 !important;
-    color: #ffffff !important;
-    padding: 60px 5% 40px 5%;
-    overflow-y: auto;
-    opacity: 1 !important;
-    pointer-events: auto;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(20, 25, 30, 0.9);
+    transform: translateZ(-2px);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+    z-index: 1;
     border-radius: 8px 16px 8px 8px;
     border: 1px solid var(--glass-border);
 }
 
-.folder-front::before {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 0;
-    width: 100px;
-    height: 15px;
-    background: rgba(30, 40, 50, 0.95);
-    border: 1px solid var(--glass-border);
-    border-bottom: none;
-    border-radius: 8px 8px 0 0;
+/* --- Buttons Styling --- */
+.folder-controls {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px;
+    background: #1a1d24;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.github-btn-inside, .close-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.folder:hover 
+.github-btn-inside {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--accent-cyan);
+    border-color: rgba(0, 243, 255, 0.3);
+}
 
-.folder h4 {
+.github-btn-inside:hover {
+    background: rgba(0, 243, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.close-btn {
+    background: rgba(255, 85, 85, 0.1);
+    color: #ff5555;
+    border-color: rgba(255, 85, 85, 0.3);
+}
+
+.close-btn:hover {
+    background: rgba(255, 85, 85, 0.2);
+}
+
+/* --- Standard Grid and Card Styles --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 8px 24px rgba(0, 243, 255, 0.1);
+}
+
+.card h4 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+}
+
+.card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
 }
 
 .badge {
@@ -238,13 +291,6 @@ h3 {
     align-self: flex-start;
 }
 
-.folder p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-}
-
 .btn {
     display: inline-block;
     padding: 0.6rem 1.2rem;
@@ -257,7 +303,6 @@ h3 {
     border-radius: 6px;
     text-align: center;
     transition: all 0.3s ease;
-    margin-top: auto;
 }
 
 .btn:hover {
@@ -265,261 +310,93 @@ h3 {
     box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }
 
-/* Active and Inactive states */
+
+/* --- Folder Active & Inactive Modal Styles --- */
 .folder.active {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 90vw;
-    height: 90vh;
-    max-width: 1200px;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 90vw !important;
+    height: 90vh !important;
+    max-width: 1200px !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 9999 !important;
     cursor: default;
-    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.85), 0 20px 60px rgba(0,0,0,0.8);
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.9), 0 20px 60px rgba(0,0,0,0.8) !important;
+    transition: all 0.5s ease;
 }
 
 .folder.active .folder-front {
-    transform: rotateY(-180deg);
+    transform: rotateY(-180deg) translateZ(5px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
-
- 
+.folder.active .folder-inside {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 100 !important;
+    transform: translateZ(1px) !important;
+}
 
 .folder.inactive {
     opacity: 0;
-    transform: scale(0.8);
     pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
-/* GitHub Readme Content Styling inside folder */
-.readme-content {
-    color: #ffffff;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.readme-content h1 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 5px;
-}
-
-.readme-content h2 {
-    font-size: 1.2rem;
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-.readme-content h3 {
-    font-size: 1.1rem;
-    color: var(--text-main);
-    margin-top: 1.5rem;
-    margin-bottom: 0.8rem;
-    border-bottom: 1px solid var(--glass-border);
-    padding-bottom: 0.3rem;
-}
-
-.readme-content a {
-    color: var(--accent-cyan);
-    text-decoration: none;
-}
-
-.readme-content a:hover {
-    text-decoration: underline;
-}
-
-.readme-content p, .readme-content li {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #cbd5e1;
-}
-
-.readme-content ul, .readme-content ol {
-    padding-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.readme-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin: 1rem 0;
-}
-
-.readme-content code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-}
-
-.readme-content pre {
-    background: #0f1115;
-    padding: 10px;
-    border-radius: 5px;
-    overflow-x: auto;
-    font-size: 0.8rem;
-    margin: 10px 0;
-}
-
-.readme-content pre code {
-    background: transparent;
-    padding: 0;
-}
-
-.loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: var(--accent-cyan);
-    font-family: var(--font-mono);
-}
-
-.close-btn {
-    position: sticky;
-    top: 20px;
-    float: right;
-    background: rgba(255, 50, 50, 0.1);
-    color: #ff5555;
-    border: 1px solid rgba(255, 50, 50, 0.3);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: 0.2s;
-    z-index: 9999;
-}
-
-.close-btn:hover {
-    background: rgba(255, 0, 0, 0.4);
-    color: #fff;
-}
-
-.skills-category {
-    margin-bottom: 1.5rem;
-}
-
-.skills-category:last-child {
-    margin-bottom: 0;
-}
-
-.skills-category h4 {
-    color: var(--text-muted);
-    margin-bottom: 0.8rem;
-    font-size: 1.1rem;
-}
-
-.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-}
-
-.tag {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--glass-border);
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    color: var(--text-main);
-    transition: border-color 0.3s ease, color 0.3s ease;
-}
-
-.tag:hover {
-    border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
-}
-
+/* --- Footer Styles Restoration --- */
 .footer {
     text-align: center;
-    padding: 1.5rem;
+    padding: 2.5rem 1.5rem;
+    margin-top: 2rem;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .social-links a {
     color: var(--text-muted);
     text-decoration: none;
     font-family: var(--font-mono);
-    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
 }
 
 .social-links a:hover {
     color: var(--accent-cyan);
+    border-bottom-color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
 }
 
 .footer p {
     font-size: 0.85rem;
     color: var(--text-muted);
+    opacity: 0.7;
 }
 
-@media (max-width: 768px) {
-    .content-wrapper {
-        padding: 1.5rem 1rem;
-    }
-    
-    .glass-panel {
-        padding: 1.5rem;
-    }
-    
-    .hero h1 {
-        font-size: 2rem;
-    }
-}.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+/* --- README Content Link Styles --- */
+.content-body a {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    transition: all 0.2s ease;
 }
 
-.card {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+.content-body a:hover {
+    color: var(--text-main);
+    background: rgba(0, 243, 255, 0.1);
+    border-bottom-color: var(--accent-cyan);
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-cyan);
-    box-shadow: 0 8px 24px rgba(0, 243, 255, 0.1);
+.content-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
-
-.card h4 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-}
-
-.card p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
