@@ -1,56 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Alex Glasov | Electrical & Electronics Engineer & Software Developer</title>
     <meta name="description" content="Portfolio of Alex Glasov. Bridging hardware and software: Electrical & Electronics Engineering, Python development, PCB diagnostics, and industrial automation. Explore open-source projects like AUTONOMOUS-ENGINEERING-COPILOT, HMON-OVERLAY, and WEFREE.">
-    <meta name="keywords" content="Alex Glasov, AlexG-4W, Python Developer, Electrical Engineering, Electronics Engineering, Electronics Technician, PCB diagnostics, industrial automation, hardware monitoring, WEFREE, HMON-OVERLAY, AUTONOMOUS-ENGINEERING-COPILOT">
+    <meta name="keywords" content="Alex Glasov, AlexG-4W, Python Developer, Electrical Engineering, Electronics Engineering, Electronics Technician, PCB diagnostics, industrial automation, hardware monitoring, WEFREE, HMON-OVERLAY, AUTONOMOUS-ENGINEERING-COPILOT, WinAnchor">
     <meta name="author" content="Alex Glasov">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://alexg-4w.github.io/">
+
+    <!-- Open Graph -->
     <meta property="og:title" content="Alex Glasov - Tech Portfolio">
     <meta property="og:description" content="Electrical & Electronics Engineering & Software Development. Specializing in Python, PCB diagnostics, and industrial automation.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://AlexG-4W.github.io/">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:url" content="https://alexg-4w.github.io/">
+    <meta property="og:image" content="https://alexg-4w.github.io/og-preview.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alex Glasov - Tech Portfolio">
+    <meta name="twitter:description" content="Electrical & Electronics Engineering & Software Development. Specializing in Python, PCB diagnostics, and industrial automation.">
+    <meta name="twitter:image" content="https://alexg-4w.github.io/og-preview.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "mainEntity": {
+            "@type": "Person",
+            "name": "Alex Glasov",
+            "url": "https://alexg-4w.github.io/",
+            "sameAs": ["https://github.com/AlexG-4W"],
+            "jobTitle": "Electrical & Electronics Engineer & Software Developer",
+            "email": "alexgl2work@gmail.com"
+        }
+    }
+    </script>
+
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Non-blocking Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600&display=swap">
+    </noscript>
 </head>
 <body>
     <canvas id="pcb-canvas"></canvas>
-    
-    <div class="content-wrapper">
+
+    <main class="content-wrapper">
         <header class="glass-panel hero">
             <h1>Technical <span class="highlight">Portfolio</span></h1>
             <p>Alex Glasov | Electronics & Software Engineering</p>
         </header>
 
-        <section class="glass-panel projects">
-            <h3>Featured Projects</h3>
-            
-            <div class="filter-menu" id="filter-menu">
+        <section class="glass-panel projects" aria-label="Projects">
+            <h2>Featured Projects</h2>
+
+            <nav class="filter-menu" id="filter-menu" aria-label="Project categories">
                 <button class="filter-btn active" data-filter="All">All</button>
                 <button class="filter-btn" data-filter="Windows Software">Windows Software</button>
                 <button class="filter-btn" data-filter="Simulators">Simulators</button>
                 <button class="filter-btn" data-filter="AI / Neural Networks">AI / Neural Networks</button>
-            </div>
+                <button class="filter-btn" data-filter="Networks">Networks</button>
+            </nav>
 
-            <div class="cabinet" id="cabinet">
+            <div class="cabinet" id="cabinet" aria-live="polite">
                 <!-- 3D Folders will be injected here via JavaScript -->
             </div>
         </section>
 
         <footer class="glass-panel footer">
             <div class="social-links">
-                <a href="https://github.com/AlexG-4W" target="_blank">GitHub</a>
+                <a href="https://github.com/AlexG-4W" target="_blank" rel="noopener noreferrer">GitHub</a>
                 <a href="mailto:alexgl2work@gmail.com">Email</a>
             </div>
             <p>&copy; 2026 Alex. Crafted with circuits and code.</p>
         </footer>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
-
 </html>
-

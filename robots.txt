@@ -1,0 +1,5 @@
+# https://www.robotstxt.org/
+User-agent: *
+Allow: /
+
+Sitemap: https://alexg-4w.github.io/sitemap.xml
