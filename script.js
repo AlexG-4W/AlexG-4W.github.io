@@ -268,11 +268,19 @@
         },
         {
             title: "WINANCHOR",
-            category: "Windows Software",
+            category: "System Utilities",
             badges: "Windows / Python",
             desc: "A lightweight Windows utility to save and restore multi-monitor window layouts with a 4-slot profile system, global hotkeys, and automatic display-change detection.",
             link: "https://github.com/AlexG-4W/WinAnchor",
             repo: "WinAnchor"
+        },
+        {
+            title: "DISPEX",
+            category: "System Utilities",
+            badges: "Windows 11 / C# 12 / .NET 8 / WinUI 3",
+            desc: "A driver-level display profile manager for Windows 11. Replaces the volatile Win+P menu with a deterministic, hardware-keyed configuration engine built on the CCD API and EDID correlation.",
+            link: "https://github.com/AlexG-4W/DispEx",
+            repo: "DispEx"
         },
         {
             title: "HFDM-THERMAL-SOLVER",
